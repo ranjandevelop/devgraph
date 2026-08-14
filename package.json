@@ -1,0 +1,19 @@
+{
+  "name": "devgraph",
+  "private": true,
+  "version": "1.0.0",
+  "description": "DevGraph - graph-based npm package dependency explorer",
+  "workspaces": [
+    "apps/api",
+    "apps/web",
+    "database"
+  ],
+  "scripts": {
+    "dev:api": "npm run dev -w apps/api",
+    "dev:web": "npm run dev -w apps/web",
+    "build": "npm run build -w apps/api && npm run build -w apps/web",
+    "start": "npm run start -w apps/api",
+    "test": "npm run test -w apps/api",
+    "seed": "npm run seed -w database"
+  }
+}
