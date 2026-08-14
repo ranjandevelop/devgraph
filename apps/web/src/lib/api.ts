@@ -7,6 +7,24 @@ import type {
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000";
 
+if (
+  typeof window !== "undefined" &&
+  API_URL.includes("localhost") &&
+  !["localhost", "127.0.0.1"].includes(window.location.hostname)
+) {
+  // This deployment is missing NEXT_PUBLIC_API_URL, so it's falling back to
+  // localhost — every API call will fail (often surfacing as a confusing
+  // CORS error, since whatever answers on the visitor's own localhost:5000
+  // won't send the right headers). Set NEXT_PUBLIC_API_URL in the hosting
+  // provider's env vars and redeploy — NEXT_PUBLIC_* vars are inlined at
+  // build time, so saving the value alone isn't enough.
+  console.error(
+    `[DevGraph] NEXT_PUBLIC_API_URL is not set for this deployment — API calls are ` +
+      `falling back to ${API_URL}, which will not work from ${window.location.origin}. ` +
+      `Set NEXT_PUBLIC_API_URL to your deployed API URL and redeploy.`,
+  );
+}
+
 export class ApiError extends Error {
   status: number;
 
